@@ -23,14 +23,13 @@ foldersRouter
   })
   .post(jsonParser, (req, res, next) => {
     const { fullName } = req.body
-    const newFolder = { fullName }
+    const newFolder = { fullname: fullName }
 
     for (const [key, value] of Object.entries(newFolder))
       if (value == null)
         return res.status(400).json({
           error: { message: `Missing '${key}' in request body` }
-        })
-    newFolder.author = author  
+        }) 
     FoldersService.insertFolder(
       req.app.get('db'),
       newFolder
@@ -39,7 +38,7 @@ foldersRouter
         res
           .status(201)
           .location(path.posix.join(req.originalUrl, `/${folder.id}`))
-          .json(serializeArticle(folder))
+          .json(serializeFolder(folder))
       })
       .catch(next)
   })
